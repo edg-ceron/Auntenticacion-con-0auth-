@@ -13,6 +13,21 @@ app.get('/api/auth/token', (req, res) => {
   console.log('GET: api/auth/token')
 })
 
+app.get('/api/auth/verify', (req, res, next) => {
+  const { access_token } = req.query
+  try {
+    const decoded = jwt.verify(access_token, config.authJwtSecret)
+    res.json({
+      message: 'The access token is valid',
+      username:  decoded.sub,
+      email:  decoded.email
+    })
+  } catch (error) {
+    console.error('[GET: /api/auth/verify]', error)
+    next(error)
+  }
+})
+
 app.post('/api/auth/token', (req, res) => {
   console.log('POST: api/auth/token')
   console.log('POST: api/auth/token')
